@@ -20,12 +20,14 @@ public class Main extends Application {
     private BorderPane root = new BorderPane(); //Root pane where it holds everything
     private BorderPane mainMenuPane = new BorderPane(); //Pane for main menu
     private GridPane viewMenuPane = new GridPane(); //Pane for view/remove/play menu
-    private GridPane createMenuPane = new GridPane(); //Pane for create menu
+    private GridPane createMenuPane = new GridPane(); //Pane for create creation menu
+    private GridPane createAudioMenuPane = new GridPane();// Pane for create audio menu
     //Menu selection buttons
     private HBox menuSelectionButtons = new HBox(); //HBox where it holds menu buttons
     private Button mainMenuButton = new Button("Main Menu");
     private Button viewMenuButton = new Button("Play/Remove");
-    private Button createMenuButton = new Button("Create New");
+    private Button createMenuButton = new Button("Create New Creation");
+    private Button createAudioMenuButton = new Button("Create New Audio");
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -37,7 +39,7 @@ public class Main extends Application {
         primaryStage.show();
 
         //menuSelectionButtons setup (The buttons at the bottom of the window)
-        menuSelectionButtons.getChildren().addAll(createMenuButton, mainMenuButton,viewMenuButton);
+        menuSelectionButtons.getChildren().addAll(createMenuButton, createAudioMenuButton, mainMenuButton,viewMenuButton);
         menuSelectionButtons.setAlignment(Pos.CENTER);
 
         //Main Menu Design
@@ -48,10 +50,15 @@ public class Main extends Application {
         mainMenuPane.setTop(welcomeText);
         mainMenuPane.setAlignment(welcomeText, Pos.CENTER);
 
-        //Create Menu Design
+        //Create Creation Menu Design
         Text createMenuTitle = new Text("######Create A New Creation######");
         createMenuTitle.setStyle("-fx-font: 18 arial;");
         createMenuPane.add(createMenuTitle, 0,0,2,1);
+
+        //Create Audion Menu Design
+        Text createAudioMenuTitle = new Text("######Create A New Audio File######");
+        createAudioMenuTitle.setStyle("-fx-font: 18 arial;");
+        createAudioMenuPane.add(createAudioMenuTitle,0,0,2,1);
 
         //View Pane design
         Text viewMenuTitle = new Text("######View/Delete Existing Creations######");
@@ -106,6 +113,11 @@ public class Main extends Application {
                 menuConfig("view");
             }
         });
+        //change to CreateAudio menu
+        createAudioMenuButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) { menuConfig("createAudio"); }
+        });
     }
 
     //This method sets up the design of the menu pane when a menu is selected
@@ -113,24 +125,39 @@ public class Main extends Application {
         if(menu.equals("create")){
             root.getChildren().remove(mainMenuPane);
             root.getChildren().remove(viewMenuPane);
+            root.getChildren().remove(createAudioMenuPane);
             root.getChildren().add(createMenuPane);
             createMenuButton.setDisable(true);
             viewMenuButton.setDisable(false);
             mainMenuButton.setDisable(false);
-        }else if(menu.equals("view")){
+            createAudioMenuButton.setDisable(false);
+        }else if(menu.equals("view")) {
             root.getChildren().remove(mainMenuPane);
             root.getChildren().remove(createMenuPane);
+            root.getChildren().remove(createAudioMenuPane);
             root.getChildren().add(viewMenuPane);
             viewMenuButton.setDisable(true);
+            createMenuButton.setDisable(false);
+            mainMenuButton.setDisable(false);
+            createAudioMenuButton.setDisable(false);
+        }else if (menu.equals("createAudio")){
+            root.getChildren().add(createAudioMenuPane);
+            root.getChildren().remove(mainMenuPane);
+            root.getChildren().remove(createMenuPane);
+            root.getChildren().remove(viewMenuPane);
+            createAudioMenuButton.setDisable(true);
+            viewMenuButton.setDisable(false);
             createMenuButton.setDisable(false);
             mainMenuButton.setDisable(false);
         }else{
             root.getChildren().remove(createMenuPane);
             root.getChildren().remove(viewMenuPane);
+            root.getChildren().remove(createAudioMenuPane);
             root.getChildren().add(mainMenuPane);
             mainMenuButton.setDisable(true);
             createMenuButton.setDisable(false);
             viewMenuButton.setDisable(false);
+            createAudioMenuButton.setDisable(false);
         }
     }
 
