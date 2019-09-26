@@ -35,9 +35,9 @@ public class Main extends Application {
 	//Menu selection buttons
 	private HBox menuSelectionButtons = new HBox(); //HBox where it holds menu buttons
 	private Button mainMenuButton = new Button("Main Menu");
-	private Button viewMenuButton = new Button("Play/Remove");
-	private Button createMenuButton = new Button("Create New Creation");
-	private Button createAudioMenuButton = new Button("Create New Audio");
+	private Button viewMenuButton = new Button("View Creations");
+	private Button createMenuButton = new Button("Create New");
+	private Button createAudioMenuButton = new Button("View Audio");
 
 	private MediaView mediaView = null;
 	private MediaPlayer player = null;
@@ -46,12 +46,12 @@ public class Main extends Application {
 		primaryStage.setTitle("VARpedia Prototype");
 
 		//Show GUI
-		Scene scene = new Scene(root, 500, 500);
+		Scene scene = new Scene(root, 400, 500);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
 		//menuSelectionButtons setup (The buttons at the bottom of the window)
-		menuSelectionButtons.getChildren().addAll(createMenuButton, createAudioMenuButton, mainMenuButton,viewMenuButton);
+		menuSelectionButtons.getChildren().addAll(mainMenuButton,createMenuButton, createAudioMenuButton, viewMenuButton);
 		menuSelectionButtons.setAlignment(Pos.CENTER);
 
 		//Main Menu Design
@@ -63,20 +63,68 @@ public class Main extends Application {
 		mainMenuPane.setAlignment(welcomeText, Pos.CENTER);
 
 		//Create Creation Menu Design
-		Text createMenuTitle = new Text("######Create A New Creation######");
+		Text createMenuTitle = new Text("######Search From Wikipedia######");
 		createMenuTitle.setStyle("-fx-font: 18 arial;");
 		createMenuPane.add(createMenuTitle, 0,0,2,1);
-
+		createMenuPane.getColumnConstraints().add(new ColumnConstraints(300));
+		createMenuPane.getColumnConstraints().add(new ColumnConstraints(100));
+		createMenuPane.getRowConstraints().add(new RowConstraints(40));
+		createMenuPane.getRowConstraints().add(new RowConstraints(25));
+		createMenuPane.getRowConstraints().add(new RowConstraints(340));
+		createMenuPane.getRowConstraints().add(new RowConstraints(25));
+		createMenuPane.getRowConstraints().add(new RowConstraints(25));
+		TextField searchTextField = new TextField("Type here to search!");
+		searchTextField.setPrefSize(300, 1000);
+		createMenuPane.add(searchTextField, 0, 1,1,1);
+		Button searchButton = new Button("Search");
+		searchButton.setMaxWidth(100);
+		createMenuPane.add(searchButton,1,1,1,1);
+		TextArea wikitTextArea = new TextArea("Click Search Button!\n\n\n"
+				+ "[Button name]: [functions]\n"
+				+ "[Create Creation]: [Create a new creation from dragged texts]\n"
+				+ "[Create Audio]: [Create a new audio from dragged texts]\n"
+				+ "[Preview Audio]: [Preview the dragged text]");
+		
+		createMenuPane.add(wikitTextArea, 0, 2, 2, 1);
+		HBox createMenuSelection = new HBox(); //HBox where it holds menu buttons
+		Button createCreation = new Button("Create Creation");
+		Button createAudio = new Button("Create Audio");
+		Button previewAudio = new Button("Preview Audio");
+		createMenuSelection.getChildren().addAll(createCreation, createAudio, previewAudio);
+		createMenuSelection.setAlignment(Pos.CENTER);
+		createMenuPane.add(createMenuSelection, 0, 3, 2, 1);
+		
 		// Create Playing of Creations Design
 				Text playCreationTitle = new Text("######PLaying Creation######");
 				playCreationTitle.setStyle("-fx-font: 18 arial;");
 				playCreationMenu.setTop(playCreationTitle);
 
-		//Create Audion Menu Design
+		//Create Audio Menu Design
 		Text createAudioMenuTitle = new Text("######Create A New Audio File######");
 		createAudioMenuTitle.setStyle("-fx-font: 18 arial;");
 		createAudioMenuPane.add(createAudioMenuTitle,0,0,2,1);
-
+		createAudioMenuPane.getColumnConstraints().add(new ColumnConstraints(300));
+		createAudioMenuPane.getColumnConstraints().add(new ColumnConstraints(100));
+		createAudioMenuPane.getRowConstraints().add(new RowConstraints(40));
+		createAudioMenuPane.getRowConstraints().add(new RowConstraints(200));
+		createAudioMenuPane.getRowConstraints().add(new RowConstraints(25));
+		createAudioMenuPane.getRowConstraints().add(new RowConstraints(200));
+		
+		TextArea audioList = new TextArea("Click \"Update list\"!");
+		audioList.setEditable(false);
+		createAudioMenuPane.add(audioList,0,1,1,1);
+		Button updateAudioButton = new Button("Update list");
+		updateAudioButton.setMaxWidth(100);
+		createAudioMenuPane.add(updateAudioButton,1,1,1,1);
+		Text creationViaAudio = new Text("Copy the audios that you want from the above list");
+		createAudioMenuPane.add(creationViaAudio, 0, 2,2,1);
+		TextArea audioToCreationList = new TextArea("Type names of audios to merge"
+				+ "\neach separed by a new line");
+		createAudioMenuPane.add(audioToCreationList, 0, 3, 1,1);
+		Button createViaAudioButton = new Button("Create");		
+		createAudioMenuPane.add(createViaAudioButton, 1, 3, 1, 1);
+		createViaAudioButton.setMaxWidth(100);
+		
 		//View Pane design
 		Text viewMenuTitle = new Text("######View/Delete Existing Creations######");
 		viewMenuTitle.setStyle("-fx-font: 18 arial;");
@@ -89,17 +137,21 @@ public class Main extends Application {
 		viewMenuPane.getRowConstraints().add(new RowConstraints(25));
 
 		TextArea creationList = new TextArea("[Click \"Update list\" to update the list]");
+		creationList.setEditable(false);
 		viewMenuPane.add(creationList,0,1,1,1);
 		Button updateButton = new Button("Update list");
+		updateButton.setMaxWidth(100);
 		viewMenuPane.add(updateButton,1,1,1,1);
 		TextField deleteTF = new TextField("Enter name of creation to delete");
 		viewMenuPane.add(deleteTF, 0, 2,1,1);
 		Button deleteButton = new Button("Delete");
+		deleteButton.setMaxWidth(100);
 		viewMenuPane.add(deleteButton,1,2,1,1);
 		TextField playTF = new TextField("Enter name of creation to play");
 		viewMenuPane.add(playTF, 0, 3,1,1);
 		Button playButton = new Button("Play");
 		viewMenuPane.add(playButton,1,3,1,1);
+		playButton.setMaxWidth(100);
 
 		//Default GUI configuration
 		//When the program is launched, the default menu shown is the main menu
