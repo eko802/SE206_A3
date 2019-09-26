@@ -94,6 +94,29 @@ public class Main extends Application {
 		createMenuSelection.setAlignment(Pos.CENTER);
 		createMenuPane.add(createMenuSelection, 0, 3, 2, 1);
 		
+		//Create Menu Button functions
+		searchButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				String searched = searchTextField.getText();
+				//If invalid input is given (empty input, or default input)
+				if(searched.equals("")||searched.equals("Type here to search!")) {
+					Wikipedia.alertInvalidSearch();
+				}else {
+					wikitTextArea.clear();
+					WikiWorker worker = new WikiWorker(searched, wikitTextArea);
+					worker.start();
+				}
+				
+			}			
+		});
+		
+		
+		
+		
+		
+		
 		// Create Playing of Creations Design
 				Text playCreationTitle = new Text("######PLaying Creation######");
 				playCreationTitle.setStyle("-fx-font: 18 arial;");
@@ -124,6 +147,20 @@ public class Main extends Application {
 		Button createViaAudioButton = new Button("Create");		
 		createAudioMenuPane.add(createViaAudioButton, 1, 3, 1, 1);
 		createViaAudioButton.setMaxWidth(100);
+		
+		//Create Audio menu button functions
+		updateAudioButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					//Display saved audio file list
+					AudioList.displayExistingAudioList(audioList);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		});
 		
 		//View Pane design
 		Text viewMenuTitle = new Text("######View/Delete Existing Creations######");
