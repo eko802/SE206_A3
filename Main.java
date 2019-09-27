@@ -162,6 +162,21 @@ public class Main extends Application {
 			
 		});
 		
+		//Merge Audio files to create a new creation
+		createViaAudioButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					//Display saved audio file list
+					MergeAudioFilesWorker workerAudio = new MergeAudioFilesWorker(audioToCreationList);
+					workerAudio.start();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+		});
+		
 		//View Pane design
 		Text viewMenuTitle = new Text("######View/Delete Existing Creations######");
 		viewMenuTitle.setStyle("-fx-font: 18 arial;");
