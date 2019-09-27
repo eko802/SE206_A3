@@ -113,6 +113,39 @@ public class Main extends Application {
 		});
 		
 		
+		previewAudio.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				// Respond to highlighted text
+				String highlightedText = wikitTextArea.getSelectedText();
+				if (highlightedText.equals("")||highlightedText == null) {
+					AudioRetrieve.showError();
+					
+				}else {
+					
+					AudioRetrieve.saveTextToAudio(highlightedText, true);
+					
+				}
+				
+			}
+			
+		});
+		
+		
+		createAudio.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				// Respond to highlighted text
+				String highlightedText = wikitTextArea.getSelectedText();
+				if (highlightedText.equals("")||highlightedText == null) {
+					AudioRetrieve.showError();
+					
+				}else {
+					AudioRetrieve.saveTextToAudio(highlightedText, false);
+					
+				}
+			}	
+		});
 		
 		
 		
