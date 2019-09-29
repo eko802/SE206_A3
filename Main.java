@@ -112,6 +112,24 @@ public class Main extends Application {
 			}			
 		});
 		
+		createCreation.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// Respond to highlighted text
+				String highlightedText = wikitTextArea.getSelectedText();
+				if (highlightedText.equals("")||highlightedText == null) {
+					AudioRetrieve.showError();
+					
+				}else {
+					AudioRetrieve.saveTextToAudio(highlightedText, false, false);
+					CreateNewCreation createCreation = new CreateNewCreation("Ask user for creation name", false);
+					createCreation.start();
+				}
+				
+			}
+			
+		});
 		
 		previewAudio.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -123,7 +141,7 @@ public class Main extends Application {
 					
 				}else {
 					
-					AudioRetrieve.saveTextToAudio(highlightedText, true);
+					AudioRetrieve.saveTextToAudio(highlightedText, true, true);
 					
 				}
 				
@@ -141,8 +159,7 @@ public class Main extends Application {
 					AudioRetrieve.showError();
 					
 				}else {
-					AudioRetrieve.saveTextToAudio(highlightedText, false);
-					
+					AudioRetrieve.saveTextToAudio(highlightedText, false, true);
 				}
 			}	
 		});
@@ -327,7 +344,7 @@ public class Main extends Application {
 							Media video = new Media(fileUrl.toURI().toString());
 							player = new MediaPlayer(video);
 							player.setAutoPlay(true);
-							mediaView = new MediaView(player);	
+							mediaView = new MediaView(player);
 							playCreationMenu.setCenter(mediaView);
 							root.getChildren().add(playCreationMenu);
 							mediaView.fitWidthProperty().bind(root.widthProperty());
