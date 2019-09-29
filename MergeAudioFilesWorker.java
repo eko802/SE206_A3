@@ -28,7 +28,7 @@ public class MergeAudioFilesWorker extends Thread{
 			
 			// Making sure audio Files are valid
 			for (String audioFile : audioNames) {
-				ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", "[ -e \"./audioFiles/" + audioFile + ".mp3\" ]");
+				ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", "[ -e \"./audioFiles/" + audioFile + ".wave\" ]");
 				Process process = pb.start();
 				int exitStatus = process.waitFor();
 				

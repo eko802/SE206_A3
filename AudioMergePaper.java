@@ -1,7 +1,9 @@
 package sample;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,11 +14,13 @@ import javafx.scene.control.TextInputDialog;
 public class AudioMergePaper implements Runnable{
 	String _task;
 	String[] _audioFiles;
-	
+	String exitType;
+	String _creationName;
+
 	public AudioMergePaper(String task) {
 		this._task = task;
 	}
-	
+
 	public AudioMergePaper(String task, String[] audioFiles) {
 		this._task = task;
 		this._audioFiles = audioFiles;
@@ -52,6 +56,7 @@ public class AudioMergePaper implements Runnable{
 								return;
 							}
 						}
+						_creationName = result.get();
 						_task = "Ask user for number of images";
 						br.close();
 					} catch (Exception e) {
@@ -74,12 +79,90 @@ public class AudioMergePaper implements Runnable{
 				Optional<String> result = dialog.showAndWait();
 				if (result.isPresent()){
 					// creating the creation
-					 System.out.println("Your choice: " + result.get());
+					TextInputDialog dialog2 = new TextInputDialog();
+					dialog2.setTitle("Images of creation");
+					dialog2.setHeaderText("Images of creation");
+					dialog2.setContentText("Please enter the images you would like for the creation:");
+					Optional<String> result2 = dialog2.showAndWait();
+					if (result2.isPresent()){
+						FlickrGetImages test = new FlickrGetImages(result2.get(), Integer.parseInt(result.get()));
+						exitType = test.retrieveImages();
+					}
+
+					if (exitType.equals("ERROR")) {
+						return;
+					} else {
+						String audioFiles;
+						String pattern = "\'[0:0]";
+						if (_audioFiles.length ==  1) {
+							audioFiles = "-i ./audioFiles/" + _audioFiles[0] + ".wave ";
+						} else {
+							audioFiles = "-i ./audioFiles/" + _audioFiles[0] + ".wave ";
+						}
+
+						// Merging audio Files
+						for (int i = 1; i < _audioFiles.length; i++) {
+							audioFiles = audioFiles + "-i ./audioFiles/" + _audioFiles[i] + ".wave ";
+							pattern = pattern + "[" + i + ":0]";
+						}
+						ProcessBuilder mergeAudio = new ProcessBuilder("/bin/bash", "-c", "ffmpeg " + audioFiles 
+								+ "-filter_complex " + pattern + "concat=n=" + _audioFiles.length + ":v=0:a=1[out]\' -map \'[out]\' output.wav;");
+						Process audioFileMerge = mergeAudio.start();
+						int wait = audioFileMerge.waitFor();
+
+
+						ProcessBuilder numberOfImagesFrameRate = new ProcessBuilder("/bin/bash", "-c", "ls ./" + result2.get());
+						Process process = numberOfImagesFrameRate.start();
+						BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+						// Calculate Number of images
+						int numberOfImages = 0;
+						String line;
+						while ((line = stdout.readLine()) != null) {
+							numberOfImages++;
+						}
+
+						stuff(numberOfImages, result2);
+					}
+
 				}
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void stuff(int numberOfImages, Optional<String> result2) {
+		// Getting duration of audio File
+		try {
+			ProcessBuilder timeOfAudio = new ProcessBuilder("/bin/bash", "-c", "echo `soxi -D output.wav`");
+			Process process2 = timeOfAudio.start();
+			int exitAudio = process2.waitFor();
+			BufferedReader stdout2 = new BufferedReader(new InputStreamReader(process2.getInputStream()));
+			String duration = stdout2.readLine();
+			double durationOfAudio = Double.parseDouble(duration);
+			double framerate = (double)(numberOfImages / durationOfAudio);
+
+			String command = "cat ./" + result2.get() + "/* | ffmpeg -framerate " + framerate + " -f image2pipe -i - output.mp4;"
+					+ "ffmpeg -i output.mp4 -i output.wav -c:v copy -c:a aac " + _creationName + ".mp4"; 
+
+			ProcessBuilder creatingCreation = new ProcessBuilder("/bin/bash", "-c", command);
+			Process pb1 = creatingCreation.start();
+			int exit1 = pb1.waitFor();
+
+			ProcessBuilder removeAndMoveFiles = new ProcessBuilder("/bin/bash", "-c", "mv \"" + _creationName + ".mp4\" \"./creations\""
+					+ ";rm \"output.wav\" \"output.mp4\";echo \"" + _creationName + "\" >> \"nameOfCreations.txt\"");
+			Process pb2 = removeAndMoveFiles.start();
+			int exit2 = pb2.waitFor();
+
+			Alert invalidSearchAlert = new Alert(Alert.AlertType.INFORMATION);
+			invalidSearchAlert.setTitle("Complete");
+			invalidSearchAlert.setContentText("Creation of merging audioFiles is successfull!!!");
+			invalidSearchAlert.showAndWait();
+			return;
+		} catch (Exception e) {
+
+		}
 	}
 }
