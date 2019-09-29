@@ -30,10 +30,10 @@ public class AudioRetrieve {
 			// receiving the user input
 			return result.get();
 		}else {
-			return null;
+			return "cancelled";
 		}
 	}
-	
+
 	//Show error when text is not selected from the wikit Text Area
 	static void showError() {
 		Alert highlightError = new Alert(Alert.AlertType.ERROR);
@@ -42,91 +42,96 @@ public class AudioRetrieve {
 		highlightError.showAndWait();
 		return;
 	}
-	
+
 	//Show error when word count > 20
 	static void showWCError() {
 		Alert highlightError = new Alert(Alert.AlertType.ERROR);
 		highlightError.setTitle("Please select less number of words");
-		highlightError.setContentText("Number of words cannot exceed 20. Please select less.");
+		highlightError.setContentText("Number of words cannot exceed 20.");
 		highlightError.showAndWait();
 		return;
 	}
-	
-	
-	static void saveTextToAudio(String text, boolean preview) {
+
+
+	static void saveTextToAudio(String text, boolean preview, boolean popup) throws Exception {
 		int wc = text.split(" ").length;
-		
+
 		//If word count exceeds max, show error
 		if(wc > 20) {
 			showWCError();
-			return;
+			throw new Exception();
 		}
-		
+
 		//When cancel  button is clicked, do nothing
 		String voice = chooseSynthSetting();
 		if(voice == null) {
 			return;
 		}
-		
+		if(voice.equals("cancelled")) {
+			throw new Exception();
+		}
+
 		//replace newline with a space
 		text = text.replace("\n", " ");
-		
+
 		//Distinguish whether the button pressed is preview audio or create audio
 		if(preview == true) {
 			previewAudio(text, voice);
 		}else {
-			saveAudio(text, voice);
+			saveAudio(text, voice, popup);
 		}
-		
-		
-		
+
+
+
 	}
-	
-	
-	static void saveAudio(String text, String voice) {
-		
-		String audioName = "";
-		
+
+
+	static void saveAudio(String text, String voice, boolean popup) {
+
+		String audioName = "unnamedAudio";
+
+
 		//Recieve name of the audio from the user
-		TextInputDialog dialog = new TextInputDialog();
-		dialog.setTitle("Name of the audio");
-		dialog.setHeaderText("Naming a new audio!");
-		dialog.setContentText("Please enter the name of the audio:");
-		
-		Optional<String> result = dialog.showAndWait();
-		if (result.isPresent()){
-			audioName = result.get();
-		}else {
-			return;
+		if(popup == true) {
+			TextInputDialog dialog = new TextInputDialog();
+			dialog.setTitle("Name of the audio");
+			dialog.setHeaderText("Naming a new audio!");
+			dialog.setContentText("Please enter the name of the audio:");
+
+			Optional<String> result = dialog.showAndWait();
+			if (result.isPresent()){
+				audioName = result.get();
+			}else {
+				return;
+			}
 		}
-		
 		makeAudioCreationSCM(text, voice, audioName);
 		String cmd = "festival -b createTemp.scm";
 		try {
 			ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", cmd);
 			Process process = pb.start();
-			
+
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	static void previewAudio(String text, String voice) {
-			
+
 		makeSCM(text, voice);
-		
+
 		String cmd = "festival -b temp.scm";
 		try {
 			ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", cmd);
 			Process process = pb.start();
-			
+
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 
-		
+
 	}
-	
+
 	//make scm for creation of audio file
 	static void makeAudioCreationSCM(String text, String voice, String audioName) {
 		String cmd = "printf \"(voice_"+voice+")\n(utt.save.wave (SayText \\\""+text+"\\\") \\\""+"./audioFiles/"+audioName+".wave\\\" 'riff)\" > createTemp.scm";
@@ -144,15 +149,15 @@ public class AudioRetrieve {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		Alert audioSaved = new Alert(Alert.AlertType.INFORMATION);
 		audioSaved.setTitle("Audio Successfully saved");
-		audioSaved.setContentText(audioName + " is successfully saved. The audio will start playing");
+		audioSaved.setContentText(audioName + " is successfully saved. The audio will play");
 		audioSaved.showAndWait();
 		return;
-		
+
 	}
-	
+
 	//make scm for preview audio
 	static void makeSCM(String text, String voice) {
 		String cmd = "printf \"" + "(voice_"+voice+")\n" + "(SayText \\\"" + text + "\\\")\" > temp.scm";
@@ -163,6 +168,6 @@ public class AudioRetrieve {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 }

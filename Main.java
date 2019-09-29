@@ -84,7 +84,7 @@ public class Main extends Application {
 				+ "[Create Creation]: [Create a new creation from dragged texts]\n"
 				+ "[Create Audio]: [Create a new audio from dragged texts]\n"
 				+ "[Preview Audio]: [Preview the dragged text]");
-		
+
 		createMenuPane.add(wikitTextArea, 0, 2, 2, 1);
 		HBox createMenuSelection = new HBox(); //HBox where it holds menu buttons
 		Button createCreation = new Button("Create Creation");
@@ -93,7 +93,7 @@ public class Main extends Application {
 		createMenuSelection.getChildren().addAll(createCreation, createAudio, previewAudio);
 		createMenuSelection.setAlignment(Pos.CENTER);
 		createMenuPane.add(createMenuSelection, 0, 3, 2, 1);
-		
+
 		//Create Menu Button functions
 		searchButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -108,11 +108,36 @@ public class Main extends Application {
 					WikiWorker worker = new WikiWorker(searched, wikitTextArea);
 					worker.start();
 				}
-				
+
 			}			
 		});
-		
-		
+
+		createCreation.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// Respond to highlighted text
+				boolean error = false;
+				String highlightedText = wikitTextArea.getSelectedText();
+				if (highlightedText.equals("")||highlightedText == null) {
+					AudioRetrieve.showError();
+
+				}else {
+					try {
+					AudioRetrieve.saveTextToAudio(highlightedText, false, false);
+					} catch(Exception e) {
+						error = true;
+					}
+					if(error == false) {
+						CreateNewCreation createCreation = new CreateNewCreation("Ask user for creation name", false);
+						createCreation.start();
+					}
+				}
+
+			}
+
+		});
+
 		previewAudio.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -120,18 +145,21 @@ public class Main extends Application {
 				String highlightedText = wikitTextArea.getSelectedText();
 				if (highlightedText.equals("")||highlightedText == null) {
 					AudioRetrieve.showError();
-					
+
 				}else {
-					
-					AudioRetrieve.saveTextToAudio(highlightedText, true);
-					
+					try {
+						AudioRetrieve.saveTextToAudio(highlightedText, true, true);	
+					}catch(Exception e) {
+						
+					}
+
 				}
-				
+
 			}
-			
+
 		});
-		
-		
+
+
 		createAudio.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -139,21 +167,24 @@ public class Main extends Application {
 				String highlightedText = wikitTextArea.getSelectedText();
 				if (highlightedText.equals("")||highlightedText == null) {
 					AudioRetrieve.showError();
-					
+
 				}else {
-					AudioRetrieve.saveTextToAudio(highlightedText, false);
-					
+					try {
+						AudioRetrieve.saveTextToAudio(highlightedText, false, true);
+					}catch(Exception e) {
+						
+					}
 				}
 			}	
 		});
-		
-		
-		
-		
+
+
+
+
 		// Create Playing of Creations Design
-				Text playCreationTitle = new Text("######PLaying Creation######");
-				playCreationTitle.setStyle("-fx-font: 18 arial;");
-				playCreationMenu.setTop(playCreationTitle);
+		Text playCreationTitle = new Text("######PLaying Creation######");
+		playCreationTitle.setStyle("-fx-font: 18 arial;");
+		playCreationMenu.setTop(playCreationTitle);
 
 		//Create Audio Menu Design
 		Text createAudioMenuTitle = new Text("######Create A New Audio File######");
@@ -165,7 +196,7 @@ public class Main extends Application {
 		createAudioMenuPane.getRowConstraints().add(new RowConstraints(200));
 		createAudioMenuPane.getRowConstraints().add(new RowConstraints(25));
 		createAudioMenuPane.getRowConstraints().add(new RowConstraints(200));
-		
+
 		TextArea audioList = new TextArea("Click \"Update list\"!");
 		audioList.setEditable(false);
 		createAudioMenuPane.add(audioList,0,1,1,1);
@@ -180,7 +211,7 @@ public class Main extends Application {
 		Button createViaAudioButton = new Button("Create");		
 		createAudioMenuPane.add(createViaAudioButton, 1, 3, 1, 1);
 		createViaAudioButton.setMaxWidth(100);
-		
+
 		//Create Audio menu button functions
 		updateAudioButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -192,9 +223,9 @@ public class Main extends Application {
 					e.printStackTrace();
 				}
 			}
-			
+
 		});
-		
+
 		//Merge Audio files to create a new creation
 		createViaAudioButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -207,9 +238,9 @@ public class Main extends Application {
 					e.printStackTrace();
 				}
 			}
-			
+
 		});
-		
+
 		//View Pane design
 		Text viewMenuTitle = new Text("######View/Delete Existing Creations######");
 		viewMenuTitle.setStyle("-fx-font: 18 arial;");
@@ -310,7 +341,7 @@ public class Main extends Application {
 				}
 			}
 		});
-		
+
 		// Play an existing creation
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -327,7 +358,7 @@ public class Main extends Application {
 							Media video = new Media(fileUrl.toURI().toString());
 							player = new MediaPlayer(video);
 							player.setAutoPlay(true);
-							mediaView = new MediaView(player);	
+							mediaView = new MediaView(player);
 							playCreationMenu.setCenter(mediaView);
 							root.getChildren().add(playCreationMenu);
 							mediaView.fitWidthProperty().bind(root.widthProperty());
@@ -335,7 +366,7 @@ public class Main extends Application {
 							break; 
 						}
 					}
-					
+
 					/*
 					 * If the creation which the user specifies is not found then alert is thrown
 					 * Otherwise the creation is played until the end or user switches to a different
@@ -380,7 +411,7 @@ public class Main extends Application {
 	//This method also terminates the playing of the creation
 	void menuConfig(String menu, MediaView mediaView, MediaPlayer player){
 		if(menu.equals("create")){
-			
+
 			// If creation is currently playing then it is stopped and removed from the GUI  
 			if ((mediaView != null) && (player != null)) {
 				player.stop();
@@ -399,7 +430,7 @@ public class Main extends Application {
 			mainMenuButton.setDisable(false);
 			createAudioMenuButton.setDisable(false);
 		}else if(menu.equals("view")) {
-			
+
 			// If creation is currently playing then it is stopped and removed from the GUI 
 			if ((mediaView != null) && (player != null)) {
 				player.stop();
@@ -418,7 +449,7 @@ public class Main extends Application {
 			mainMenuButton.setDisable(false);
 			createAudioMenuButton.setDisable(false);
 		}else if (menu.equals("createAudio")){
-			
+
 			// If creation is currently playing then it is stopped and removed from the GUI 
 			if ((mediaView != null) && (player != null)) {
 				player.stop();
@@ -437,7 +468,7 @@ public class Main extends Application {
 			createMenuButton.setDisable(false);
 			mainMenuButton.setDisable(false);
 		}else{
-			
+
 			// If creation is currently playing then it is stopped and removed from the GUI 
 			if ((mediaView != null) && (player != null)) {
 				player.stop();
@@ -458,9 +489,19 @@ public class Main extends Application {
 		}
 	}
 
+	public static void createFolder() {
+		try {
+			String key = "apiKey = a6c8799f554aa9e04a08158a015016e5\nsharedSecret = 2011587abd40f68a";
+			ProcessBuilder newFolders = new ProcessBuilder("/bin/bash", "-c", "touch nameOfCreations.txt nameOfAudios.txt;"
+					+ "echo \"" + key + "\" > flickr-api-keys.txt;mkdir -p creations audioFiles");
+			newFolders.start();
+		} catch (Exception e) {
 
+		}
+	}
 
 	public static void main(String[] args) {
+		createFolder();
 		launch(args);
 	}
 }
