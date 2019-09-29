@@ -111,12 +111,17 @@ public class Main extends Application {
 
 			}			
 		});
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> eea9d29aa4c59c2de8fdd7e04d931145743b612b
 		createCreation.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
 				// Respond to highlighted text
+<<<<<<< HEAD
 				boolean error = false;
 				String highlightedText = wikitTextArea.getSelectedText();
 				if (highlightedText.equals("")||highlightedText == null) {
@@ -138,6 +143,22 @@ public class Main extends Application {
 
 		});
 
+=======
+				String highlightedText = wikitTextArea.getSelectedText();
+				if (highlightedText.equals("")||highlightedText == null) {
+					AudioRetrieve.showError();
+					
+				}else {
+					AudioRetrieve.saveTextToAudio(highlightedText, false, false);
+					CreateNewCreation createCreation = new CreateNewCreation("Ask user for creation name", false);
+					createCreation.start();
+				}
+				
+			}
+			
+		});
+		
+>>>>>>> eea9d29aa4c59c2de8fdd7e04d931145743b612b
 		previewAudio.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -147,12 +168,18 @@ public class Main extends Application {
 					AudioRetrieve.showError();
 
 				}else {
+<<<<<<< HEAD
 					try {
 						AudioRetrieve.saveTextToAudio(highlightedText, true, true);	
 					}catch(Exception e) {
 						
 					}
 
+=======
+					
+					AudioRetrieve.saveTextToAudio(highlightedText, true, true);
+					
+>>>>>>> eea9d29aa4c59c2de8fdd7e04d931145743b612b
 				}
 
 			}
@@ -169,11 +196,15 @@ public class Main extends Application {
 					AudioRetrieve.showError();
 
 				}else {
+<<<<<<< HEAD
 					try {
 						AudioRetrieve.saveTextToAudio(highlightedText, false, true);
 					}catch(Exception e) {
 						
 					}
+=======
+					AudioRetrieve.saveTextToAudio(highlightedText, false, true);
+>>>>>>> eea9d29aa4c59c2de8fdd7e04d931145743b612b
 				}
 			}	
 		});
