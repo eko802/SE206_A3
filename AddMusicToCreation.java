@@ -61,7 +61,6 @@ public class AddMusicToCreation {
 		String renameCmd = "rm creations/"+name+".mp4; mv creations/"+name+"_merged.mp4 creations/"+name+".mp4; rm creations/"+name+"_merged.wav";
 		String replaceAudioCmd = "ffmpeg -i creations/"+name+".mp4 -i creations/"+name+"_merged.wav -c:v copy -map 0:v:0 -map 1:a:0 -strict -2 creations/"+name+"_merged.mp4;";
 		String cmd = "ffmpeg -i creations/"+name+".mp4 creations/"+name+".mp3; ffmpeg -i creations/"+name+".mp3 -i background_music.mp3 -filter_complex amix=inputs=2:duration=first:dropout_transition=2 creations/"+name+"_merged.mp3; ffmpeg -i creations/"+name+"_merged.mp3 creations/"+name+"_merged.wav; rm creations/*.mp3;"+replaceAudioCmd + renameCmd;
-		System.out.println(cmd);
 		ProcessBuilder extractAudioProcess = new ProcessBuilder("bash", "-c", cmd);
 		try {
 			extractAudioProcess.start();

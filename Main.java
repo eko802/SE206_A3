@@ -694,7 +694,19 @@ public class Main extends Application {
 		//change to CreateAudio menu
 		createAudioMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent actionEvent) { menuConfig("createAudio", mediaView, player); }
+			public void handle(ActionEvent actionEvent) { menuConfig("createAudio", mediaView, player); 
+			
+			String cmd = "sed -i '/unnamedAudio/d' nameOfAudios.txt";
+			ProcessBuilder extractAudioProcess = new ProcessBuilder("bash", "-c", cmd);
+			try {
+				extractAudioProcess.start();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				// the next command for merging video and audio(merged) is -> ffmpeg -i creations/"+name+".mp4 -i creations/"+name+"_merged.wav -c:v copy -map 0:v:0 -map 1:a:0 -strict -2 creations/"+name+"_new.mp4
+			}
+			
+			}
 		});
 	}
 
