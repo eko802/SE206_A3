@@ -323,7 +323,27 @@ public class Main extends Application {
 		Button playButton = new Button("Play");
 		viewMenuPane.add(playButton,1,3,1,1);
 		playButton.setMaxWidth(100);
+		TextField addBackgroundMus = new TextField("Enter name of creation to add music");
+		viewMenuPane.add(addBackgroundMus, 0, 4, 1, 1);
+		Button addButton = new Button("Add");
+		addButton.setMaxWidth(100);
+		viewMenuPane.add(addButton, 1, 4,1,1);
+		
+		//Adding Background music button function
+		addButton.setOnAction(new EventHandler<ActionEvent>() {
 
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					AddMusicToCreation.addMusic(addBackgroundMus);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		});
+		
+		
 		//Default GUI configuration
 		//When the program is launched, the default menu shown is the main menu
 		root.setCenter(mainMenuPane);
@@ -365,11 +385,15 @@ public class Main extends Application {
 				try {
 					ViewCreations.displayExistingCreations(creationList, playButton, deleteButton);
 					if ((playButton.isDisable() == true) && (deleteButton.isDisable() == true)) {
+						addButton.setDisable(true);
 						playTF.setText("There are Currently No Creations to Play!");
 						deleteTF.setText("There are Currently No Creations to Delete!");
+						addBackgroundMus.setText("There are Currently No Creation to Add Music");
 					} else {
+						addButton.setDisable(false);
 						playTF.setText("Enter name of creation to play");
 						deleteTF.setText("Enter name of creation to delete");
+						addBackgroundMus.setText("Enter name of creation to add music");
 					}
 				} catch (IOException e) {
 					e.printStackTrace();

@@ -53,11 +53,7 @@ public class AudioRetrieve {
 	}
 
 
-<<<<<<< HEAD
 	static void saveTextToAudio(String text, boolean preview, boolean popup) throws Exception {
-=======
-	static void saveTextToAudio(String text, boolean preview, boolean popup) {
->>>>>>> eea9d29aa4c59c2de8fdd7e04d931145743b612b
 		int wc = text.split(" ").length;
 
 		//If word count exceeds max, show error
@@ -71,12 +67,9 @@ public class AudioRetrieve {
 		if(voice == null) {
 			return;
 		}
-<<<<<<< HEAD
 		if(voice.equals("cancelled")) {
 			throw new Exception();
 		}
-=======
->>>>>>> eea9d29aa4c59c2de8fdd7e04d931145743b612b
 
 		//replace newline with a space
 		text = text.replace("\n", " ");

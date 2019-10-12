@@ -223,11 +223,7 @@ public class AudioMergePaper implements Runnable{
 			int exit3 = pb3.waitFor();
 			Alert invalidSearchAlert = new Alert(Alert.AlertType.INFORMATION);
 			invalidSearchAlert.setTitle("Complete");
-<<<<<<< HEAD
 			invalidSearchAlert.setContentText("Making of Creation is successfull!!!");
-=======
-			invalidSearchAlert.setContentText("Creation of merging audioFiles is successfull!!!");
->>>>>>> eea9d29aa4c59c2de8fdd7e04d931145743b612b
 			invalidSearchAlert.showAndWait();
 			return;
 		} catch (Exception e) {
