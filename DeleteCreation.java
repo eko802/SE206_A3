@@ -16,6 +16,7 @@ public class DeleteCreation {
 		
 		try {
 			String line;
+			int count = 1;
 		    while ((line = br.readLine()) != null) {
 		    	if (line.equals(deleteTF.getText())) {
 		    		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -27,7 +28,9 @@ public class DeleteCreation {
 	                    return;
 	                }else if (result.get() == ButtonType.OK) {
 	                	ProcessBuilder deleteCreation = new ProcessBuilder("bash", "-c", "rm ./creations/" + deleteTF.getText() + ".mp4;"
-	        					+ "sed -i -e \"/\\(" + deleteTF.getText() + "\\)\\b/d\" nameOfCreations.txt;");
+	        					+ "sed -i -e \"/\\(" + deleteTF.getText() + "\\)\\b/d\" nameOfCreations.txt;"
+	        							+ "rm \"./creationsNoText/" + deleteTF.getText() + ".mp4\";"
+	        									+ "sed -i \'" + count + "d\' \"searchNames.txt\"");
 	        			deleteCreation.start();
 	        			Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
                         alert2.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
@@ -37,6 +40,7 @@ public class DeleteCreation {
                         return;
 	                }
 		    	}
+		    	count++;
 		    }
 		    Alert alert2 = new Alert(Alert.AlertType.ERROR);
             alert2.setTitle("CREATION NOT DELETED");

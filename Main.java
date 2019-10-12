@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -42,6 +44,11 @@ public class Main extends Application {
 	private Button gameMenuButton = new Button("Game");
 	private MediaView mediaView = null;
 	private MediaPlayer player = null;
+	private String currentGameLevel = "Easy";
+	
+	public static String searched = "";
+	GameCreationWorker play;
+
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 		primaryStage.setTitle("VARpedia Prototype");
@@ -62,8 +69,8 @@ public class Main extends Application {
 		mainMenuPane.setCenter(instruction);
 		mainMenuPane.setTop(welcomeText);
 		mainMenuPane.setAlignment(welcomeText, Pos.CENTER);
-				
-		
+
+
 		//Create Creation Menu Design
 		Text createMenuTitle = new Text("######Search From Wikipedia######");
 		createMenuTitle.setStyle("-fx-font: 18 arial;");
@@ -101,7 +108,7 @@ public class Main extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
-				String searched = searchTextField.getText();
+				searched = searchTextField.getText();
 				//If invalid input is given (empty input, or default input)
 				if(searched.equals("")||searched.equals("Type here to search!")) {
 					Wikipedia.alertInvalidSearch();
@@ -126,7 +133,7 @@ public class Main extends Application {
 
 				}else {
 					try {
-					AudioRetrieve.saveTextToAudio(highlightedText, false, false);
+						AudioRetrieve.saveTextToAudio(highlightedText, false, false);
 					} catch(Exception e) {
 						error = true;
 					}
@@ -152,7 +159,7 @@ public class Main extends Application {
 					try {
 						AudioRetrieve.saveTextToAudio(highlightedText, true, true);	
 					}catch(Exception e) {
-						
+
 					}
 
 				}
@@ -174,7 +181,7 @@ public class Main extends Application {
 					try {
 						AudioRetrieve.saveTextToAudio(highlightedText, false, true);
 					}catch(Exception e) {
-						
+
 					}
 				}
 			}	
@@ -243,7 +250,7 @@ public class Main extends Application {
 
 		});
 
-		
+
 		//Match Game Menu Design
 		Text gameMenuTitle = new Text("######Simple Matching Game######");
 		gameMenuTitle.setStyle("-fx-font: 18 arial;");
@@ -254,7 +261,21 @@ public class Main extends Application {
 		Button DifficultButton = new Button("Difficult");
 		levelSelectionButtons.getChildren().addAll(EasyButton, MediumButton, DifficultButton);
 		levelSelectionButtons.setAlignment(Pos.CENTER);
-		
+
+		// Game starts at easy level
+		EasyButton.setDisable(true);
+
+		//Buttons for playing creation and getting correct answer
+		HBox playOrGetAnswerOfCreation = new HBox();
+		Button playCreationGame = new Button("Play Creation");
+		Button playSameCreation = new Button("Play Creation again");
+		Button getAnswer = new Button("Click to get Answer!");
+		playSameCreation.setDisable(true);
+		getAnswer.setDisable(true);
+		playOrGetAnswerOfCreation.getChildren().addAll(playCreationGame, playSameCreation, getAnswer);
+		playOrGetAnswerOfCreation.setAlignment(Pos.CENTER);
+
+
 		gameMenuPane.add(gameMenuTitle,0,0,2,1);
 		gameMenuPane.getColumnConstraints().add(new ColumnConstraints(300));
 		gameMenuPane.getColumnConstraints().add(new ColumnConstraints(100));
@@ -276,7 +297,8 @@ public class Main extends Application {
 		submitButton.setDisable(true);
 		Button instructionButton = new Button("Read Instruction");
 		gameMenuPane.add(instructionButton, 0, 5, 2, 1);
-		
+		gameMenuPane.add(playOrGetAnswerOfCreation, 0, 3,4,1);
+
 		instructionButton.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override
@@ -287,15 +309,194 @@ public class Main extends Application {
 				alert.setResizable(true);
 				alert.setHeaderText("Simple Matching Game");
 				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-				alert.setContentText("[Instruction for Simple Matching Game]\n\nClick one of the three levels (Easy, Medium, Difficult) to start the game.\nGuess the subject of the creation and click Submit button.\n\n\nEasy: Audio + Video will be played\nMedium: only Video will be played\nDifficult: Only Audio will be played");
+				alert.setContentText("[Instruction for Simple Matching Game]\n\nClick one of the three levels (Easy, Medium, Difficult) to start the game.\nClick \"Play Creation\" button to play a NEW creation.\nClick \"Play Creation again\""
+						+ " to play the SAME creation again.\nClick \"Click to get Answer!\" to get the answer for the creation played."
+						+ "\nGuess the subject of the creation and click Submit button.\n\n\nEasy: Audio + Video will be played\nMedium: only Video will be played\nDifficult: Only Audio will be played");
 				alert.showAndWait();
 				return;
 			}
-			
+
+		});
+
+		EasyButton.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				removeAudioAndVideoFile();
+				EasyButton.setDisable(true);
+				MediumButton.setDisable(false);
+				DifficultButton.setDisable(false);
+				submitButton.setDisable(true);
+				playSameCreation.setDisable(true);
+				getAnswer.setDisable(true);
+				currentGameLevel = "Easy";
+			}
+
+		});
+
+
+		MediumButton.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				removeAudioAndVideoFile();
+				MediumButton.setDisable(true);
+				EasyButton.setDisable(false);
+				DifficultButton.setDisable(false);
+				submitButton.setDisable(true);
+				playSameCreation.setDisable(true);
+				getAnswer.setDisable(true);
+				currentGameLevel = "Medium";
+
+			}
+
+		});
+
+
+		DifficultButton.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				removeAudioAndVideoFile();
+				DifficultButton.setDisable(true);
+				EasyButton.setDisable(false);
+				MediumButton.setDisable(false);
+				submitButton.setDisable(true);
+				playSameCreation.setDisable(true);
+				getAnswer.setDisable(true);
+				currentGameLevel = "Difficult";
+			}
+
+		});
+
+
+		playCreationGame.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				removeAudioAndVideoFile();
+				submitButton.setDisable(false);
+				playSameCreation.setDisable(false);
+				getAnswer.setDisable(false);
+				play = new GameCreationWorker(currentGameLevel);
+				play.start();
+			}
+
+		});
+		
+		// Submit answer to the creation
+		submitButton.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				if (play.getStatus()) {
+					PieceOfPaperGame errorMessage = new PieceOfPaperGame();
+					Platform.runLater(errorMessage);
+					root.getChildren().remove(gameMenuPane);
+					gameMenuButton.setDisable(false);
+					root.getChildren().add(createMenuPane);
+					createMenuButton.setDisable(true);
+					return;
+				}
+				String userAnswer = answer.getText().toLowerCase();
+				String realAnswer = play.getAnswer().toLowerCase();
+				
+				if (userAnswer.equals(realAnswer)) {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Congratulations!!!");
+					alert.setHeaderText("The Answer you have given in correct!!!!");
+					alert.setContentText("The Answer you have given in correct!!!!");
+					alert.showAndWait();
+					return;
+				} else {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Error Dialog");
+					alert.setHeaderText("Sorry!");
+					alert.setContentText("Ooops, your answer is INCORRECT (╯︵╰,)");
+					alert.showAndWait();
+				}
+			}
+
 		});
 		
 		
 		
+		
+		
+		getAnswer.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				if (play.getStatus()) {
+					PieceOfPaperGame errorMessage = new PieceOfPaperGame();
+					Platform.runLater(errorMessage);
+					root.getChildren().remove(gameMenuPane);
+					gameMenuButton.setDisable(false);
+					root.getChildren().add(createMenuPane);
+					createMenuButton.setDisable(true);
+					return;
+				}
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Answer!");
+				alert.setHeaderText("The Answer is \"" + play.getAnswer() + "\"");
+				alert.setContentText("The Answer is \"" + play.getAnswer() + "\"");
+				alert.showAndWait();
+				return;
+			}
+
+		});
+
+		// Play the same creation again 
+		playSameCreation.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				if (play.getStatus()) {
+					PieceOfPaperGame errorMessage = new PieceOfPaperGame();
+					Platform.runLater(errorMessage);
+					root.getChildren().remove(gameMenuPane);
+					gameMenuButton.setDisable(false);
+					root.getChildren().add(createMenuPane);
+					createMenuButton.setDisable(true);
+					return;
+				}
+				
+				if (currentGameLevel.equals("Easy")) {
+					try {
+						String creation = play.getCreationName();
+						ProcessBuilder playAgain = new ProcessBuilder("/bin/bash", "-c", "ffplay -autoexit "
+								+ "-x 400 -y 500 \"./creationsNoText/" + creation + ".mp4\"");
+						Process pb;
+						pb = playAgain.start();
+						int exit = pb.waitFor();
+						return;
+					} catch (Exception e) {
+					}
+				} else if (currentGameLevel.equals("Medium")) {
+					try {
+						ProcessBuilder playAgain = new ProcessBuilder("/bin/bash", "-c", "ffplay -autoexit "
+								+ "-x 400 -y 500 \"video.mp4\"");
+						Process pb;
+						pb = playAgain.start();
+						int exit = pb.waitFor();
+						return;
+					} catch (Exception e) {
+					}
+				} else {
+					try {
+						ProcessBuilder playAgain = new ProcessBuilder("/bin/bash", "-c", "ffplay -autoexit "
+								+ "-x 400 -y 500 \"audio.mp3\"");
+						Process pb;
+						pb = playAgain.start();
+						int exit = pb.waitFor();
+						return;
+					} catch (Exception e) {
+					}
+				}
+			}
+
+		});
+
 		//View Pane design
 		Text viewMenuTitle = new Text("######View/Delete Existing Creations######");
 		viewMenuTitle.setStyle("-fx-font: 18 arial;");
@@ -360,9 +561,9 @@ public class Main extends Application {
 				// TODO Auto-generated method stub
 				menuConfig("game",mediaView,player);
 			}
-			
+
 		});
-		
+
 		//Change to Create menu
 		createMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -442,17 +643,20 @@ public class Main extends Application {
 					while ((line = br.readLine()) != null) {
 						if (line.equals(playTF.getText())) {
 							line = "creation found";
-							viewMenuButton.setDisable(false);
-							root.getChildren().remove(viewMenuPane);
-							File fileUrl = new File("./creations/" + playTF.getText() + ".mp4"); 
-							Media video = new Media(fileUrl.toURI().toString());
-							player = new MediaPlayer(video);
-							player.setAutoPlay(true);
-							mediaView = new MediaView(player);
-							playCreationMenu.setCenter(mediaView);
-							root.getChildren().add(playCreationMenu);
-							mediaView.fitWidthProperty().bind(root.widthProperty());
-							mediaView.fitHeightProperty().bind(root.heightProperty());
+//							viewMenuButton.setDisable(false);
+//							root.getChildren().remove(viewMenuPane);
+//							File fileUrl = new File("./creations/" + playTF.getText() + ".mp4"); 
+//							Media video = new Media(fileUrl.toURI().toString());
+//							player = new MediaPlayer(video);
+//							player.setAutoPlay(true);
+//							mediaView = new MediaView(player);
+//							playCreationMenu.setCenter(mediaView);
+//							root.getChildren().add(playCreationMenu);
+//							mediaView.fitWidthProperty().bind(root.widthProperty());
+//							mediaView.fitHeightProperty().bind(root.heightProperty());
+							ProcessBuilder playCreation = new ProcessBuilder("/bin/bash", "-c", "ffplay -autoexit "
+									+ "-x 400 -y 500 \"./creations/" + playTF.getText() + ".mp4\"");
+							playCreation.start();
 							break; 
 						}
 					}
@@ -469,22 +673,20 @@ public class Main extends Application {
 						alert2.showAndWait();
 					} else {
 						// Auto playing the creation
-						player.setOnEndOfMedia(new Runnable() {
-							public void run() {
-								player.stop();
-								mediaView.fitHeightProperty().unbind();
-								mediaView.fitWidthProperty().unbind();
-								playCreationMenu.getChildren().remove(mediaView);
-								viewMenuButton.setDisable(true);
-								root.getChildren().remove(playCreationMenu);
-								root.getChildren().add(viewMenuPane);
-								return;
-							}
-						});
+//						player.setOnEndOfMedia(new Runnable() {
+//							public void run() {
+//								player.stop();
+//								mediaView.fitHeightProperty().unbind();
+//								mediaView.fitWidthProperty().unbind();
+//								playCreationMenu.getChildren().remove(mediaView);
+//								viewMenuButton.setDisable(true);
+//								root.getChildren().remove(playCreationMenu);
+//								root.getChildren().add(viewMenuPane);
+//								return;
+//							}
+//						});
 					}
 				} catch (Exception e) {
-
-				} finally {
 
 				}
 			}
@@ -558,7 +760,7 @@ public class Main extends Application {
 			root.getChildren().remove(playCreationMenu);
 			root.getChildren().remove(viewMenuPane);
 			root.getChildren().add(gameMenuPane);
-			
+
 			mainMenuButton.setDisable(false);
 			createMenuButton.setDisable(false);
 			viewMenuButton.setDisable(false);
@@ -601,20 +803,30 @@ public class Main extends Application {
 			root.getChildren().remove(playCreationMenu);
 			root.getChildren().remove(gameMenuPane);
 			root.getChildren().add(mainMenuPane);
-			mainMenuButton.setDisable(true);
 			createMenuButton.setDisable(false);
 			viewMenuButton.setDisable(false);
 			createAudioMenuButton.setDisable(false);
 			gameMenuButton.setDisable(false);
+			mainMenuButton.setDisable(true);
 		}
 	}
 
 	public static void createFolder() {
 		try {
 			String key = "apiKey = a6c8799f554aa9e04a08158a015016e5\nsharedSecret = 2011587abd40f68a";
-			ProcessBuilder newFolders = new ProcessBuilder("/bin/bash", "-c", "touch nameOfCreations.txt nameOfAudios.txt;"
-					+ "echo \"" + key + "\" > flickr-api-keys.txt;mkdir -p creations audioFiles");
+			ProcessBuilder newFolders = new ProcessBuilder("/bin/bash", "-c", "touch nameOfCreations.txt nameOfAudios.txt searchNames.txt;"
+					+ "echo \"" + key + "\" > flickr-api-keys.txt;mkdir creations audioFiles creationsNoText");
 			newFolders.start();
+		} catch (Exception e) {
+
+		}
+	}
+
+	public static void removeAudioAndVideoFile(){
+		try {
+			ProcessBuilder removeFiles = new ProcessBuilder("/bin/bash", "-c", "rm -f audio.mp3 video.mp4");
+			Process pb = removeFiles.start();
+			int exitStatus = pb.waitFor();
 		} catch (Exception e) {
 
 		}
