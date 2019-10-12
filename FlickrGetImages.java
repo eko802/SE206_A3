@@ -77,7 +77,7 @@ public class FlickrGetImages {
 					String filename = query.trim().replace(' ', '-')+"-"+System.currentTimeMillis()+"-"+photo.getId()+".jpg";
 					File outputfile = new File("./" + query,filename);
 					ImageIO.write(image, "jpg", outputfile);
-					ProcessBuilder changeRatio = new ProcessBuilder("/bin/bash", "-c", "ffmpeg -i ./" + query + "/" + filename + " -vf scale=320:240 ./" + query + "/output" + num + ".jpg;"
+					ProcessBuilder changeRatio = new ProcessBuilder("/bin/bash", "-c", "ffmpeg -i ./" + query + "/" + filename + " -vf scale=800:200 ./" + query + "/output" + num + ".jpg;"
 							+ "rm \"./" + query + "/" + filename + "\"");
 					Process process = changeRatio.start();
 					int exitStatus = process.waitFor();

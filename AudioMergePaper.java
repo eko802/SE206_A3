@@ -12,11 +12,12 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextInputDialog;
 
 public class AudioMergePaper implements Runnable{
-	String _task;
-	String[] _audioFiles;
-	String exitType;
-	String _creationName;
-	Boolean merge = true;
+	private String _task;
+	private String[] _audioFiles;
+	private String exitType;
+	private String _creationName;
+	private Boolean merge = true;
+	private String images = "";
 
 	public AudioMergePaper(String task) {
 		this._task = task;
@@ -91,6 +92,7 @@ public class AudioMergePaper implements Runnable{
 					dialog2.setContentText("Please enter the images you would like for the creation:");
 					Optional<String> result2 = dialog2.showAndWait();
 					if (result2.isPresent()){
+						images = result2.get();
 						FlickrGetImages test = new FlickrGetImages(result2.get(), Integer.parseInt(result.get()));
 						exitType = test.retrieveImages();
 					}
@@ -171,7 +173,8 @@ public class AudioMergePaper implements Runnable{
 			int exit1 = pb1.waitFor();
 
 			ProcessBuilder removeAndMoveFiles = new ProcessBuilder("/bin/bash", "-c", "mv \"" + _creationName + ".mp4\" \"./creations\""
-					+ ";rm \"output.wav\" \"output.mp4\";echo \"" + _creationName + "\" >> \"nameOfCreations.txt\"");
+					+ ";rm \"output.wav\" \"output.mp4\";echo \"" + _creationName + "\" >> \"nameOfCreations.txt\";"
+							+ "cp \"./creations/" + _creationName + ".mp4\" \"./creationsNoText\"");
 			Process pb2 = removeAndMoveFiles.start();
 			int exit2 = pb2.waitFor();
 			
@@ -179,7 +182,8 @@ public class AudioMergePaper implements Runnable{
 			ProcessBuilder addTextToVideo = new ProcessBuilder("/bin/bash", "-c", "ffmpeg -i ./creations/" + _creationName + ".mp4 "
 					+ "-vf drawtext=\"fontfile=/path/to/font.ttf: text=\'" + _creationName + "\': fontcolor=white: fontsize=18: box=1: boxcolor=black@0.5:"
 					+ "boxborderw=5: x=(w-text_w)/2: y=(h-text_h)/2\" -codec:a copy ./creations/output.mp4;rm \"./creations/" + _creationName + ".mp4\";"
-					+ "mv ./creations/output.mp4 ./creations/" + _creationName + ".mp4");
+					+ "mv ./creations/output.mp4 ./creations/" + _creationName + ".mp4;"
+							+ "echo \"" + images + "\" >> \"searchedNames.txt\"");
 			Process pb3 = addTextToVideo.start();
 			int exit3 = pb3.waitFor();
 			Alert invalidSearchAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -210,7 +214,8 @@ public class AudioMergePaper implements Runnable{
 			int exit1 = pb1.waitFor();
 
 			ProcessBuilder removeAndMoveFiles = new ProcessBuilder("/bin/bash", "-c", "mv \"" + _creationName + ".mp4\" \"./creations\""
-					+ ";rm \"./audioFiles/unnamedAudio.wave\" \"output.mp4\";echo \"" + _creationName + "\" >> \"nameOfCreations.txt\"");
+					+ ";rm \"./audioFiles/unnamedAudio.wave\" \"output.mp4\";echo \"" + _creationName + "\" >> \"nameOfCreations.txt\";"
+					+ "cp \"./creations/" + _creationName + ".mp4\" \"./creationsNoText\"");
 			Process pb2 = removeAndMoveFiles.start();
 			int exit2 = pb2.waitFor();
 			
@@ -218,16 +223,13 @@ public class AudioMergePaper implements Runnable{
 			ProcessBuilder addTextToVideo = new ProcessBuilder("/bin/bash", "-c", "ffmpeg -i ./creations/" + _creationName + ".mp4 "
 					+ "-vf drawtext=\"fontfile=/path/to/font.ttf: text=\'" + _creationName + "\': fontcolor=white: fontsize=18: box=1: boxcolor=black@0.5:"
 					+ "boxborderw=5: x=(w-text_w)/2: y=(h-text_h)/2\" -codec:a copy ./creations/output.mp4;rm \"./creations/" + _creationName + ".mp4\";"
-					+ "mv ./creations/output.mp4 ./creations/" + _creationName + ".mp4");
+					+ "mv ./creations/output.mp4 ./creations/" + _creationName + ".mp4;"
+							+ "echo \"" + Main.searched + "\" >> \"searchNames.txt\"");
 			Process pb3 = addTextToVideo.start();
 			int exit3 = pb3.waitFor();
 			Alert invalidSearchAlert = new Alert(Alert.AlertType.INFORMATION);
 			invalidSearchAlert.setTitle("Complete");
-<<<<<<< HEAD
 			invalidSearchAlert.setContentText("Making of Creation is successfull!!!");
-=======
-			invalidSearchAlert.setContentText("Creation of merging audioFiles is successfull!!!");
->>>>>>> eea9d29aa4c59c2de8fdd7e04d931145743b612b
 			invalidSearchAlert.showAndWait();
 			return;
 		} catch (Exception e) {
