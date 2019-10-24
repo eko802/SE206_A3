@@ -4,6 +4,10 @@ package sample;
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 
+/*
+ * This class merges the audio files based on the audio files provided by the user.
+ * The "Worker" ensures concurrency of the VARpedia.
+ */
 public class MergeAudioFilesWorker extends Thread{
 	TextArea _audioToCreationList;
 	

@@ -7,6 +7,10 @@ import java.io.IOException;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
+/*
+ * This class is responsible for showing the existing creations to the user
+ */
+
 public class ViewCreations {
 	
 	public static void displayExistingCreations(TextArea creationList, Button Play, Button Delete) throws IOException {

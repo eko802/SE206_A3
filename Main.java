@@ -22,6 +22,7 @@ import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -42,8 +43,6 @@ public class Main extends Application {
 	private Button createMenuButton = new Button("Create New");
 	private Button createAudioMenuButton = new Button("View Audio");
 	private Button gameMenuButton = new Button("Game");
-	private MediaView mediaView = null;
-	private MediaPlayer player = null;
 	private String currentGameLevel = "Easy";
 	
 	public static String searched = "";
@@ -55,6 +54,7 @@ public class Main extends Application {
 
 		//Show GUI
 		Scene scene = new Scene(root, 400, 500);
+		scene.getStylesheets().add(Main.class.getResource("application.css").toExternalForm());
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
@@ -65,7 +65,9 @@ public class Main extends Application {
 		//Main Menu Design
 		Text welcomeText = new Text("## WELCOME TO VARpedia prototype ##");
 		welcomeText.setStyle("-fx-font: 18 arial;");
+		welcomeText.setFill(Color.GHOSTWHITE);
 		Text instruction = new Text("Please select a menu at the bottom");
+		instruction.setFill(Color.GHOSTWHITE);
 		mainMenuPane.setCenter(instruction);
 		mainMenuPane.setTop(welcomeText);
 		mainMenuPane.setAlignment(welcomeText, Pos.CENTER);
@@ -74,6 +76,7 @@ public class Main extends Application {
 		//Create Creation Menu Design
 		Text createMenuTitle = new Text("######Search From Wikipedia######");
 		createMenuTitle.setStyle("-fx-font: 18 arial;");
+		createMenuTitle.setFill(Color.GHOSTWHITE);
 		createMenuPane.add(createMenuTitle, 0,0,2,1);
 		createMenuPane.getColumnConstraints().add(new ColumnConstraints(300));
 		createMenuPane.getColumnConstraints().add(new ColumnConstraints(100));
@@ -193,11 +196,13 @@ public class Main extends Application {
 		// Create Playing of Creations Design
 		Text playCreationTitle = new Text("######PLaying Creation######");
 		playCreationTitle.setStyle("-fx-font: 18 arial;");
+		playCreationTitle.setFill(Color.GHOSTWHITE);
 		playCreationMenu.setTop(playCreationTitle);
 
 		//Create Audio Menu Design
 		Text createAudioMenuTitle = new Text("######Create A New Audio File######");
 		createAudioMenuTitle.setStyle("-fx-font: 18 arial;");
+		createAudioMenuTitle.setFill(Color.GHOSTWHITE);
 		createAudioMenuPane.add(createAudioMenuTitle,0,0,2,1);
 		createAudioMenuPane.getColumnConstraints().add(new ColumnConstraints(300));
 		createAudioMenuPane.getColumnConstraints().add(new ColumnConstraints(100));
@@ -213,6 +218,7 @@ public class Main extends Application {
 		updateAudioButton.setMaxWidth(100);
 		createAudioMenuPane.add(updateAudioButton,1,1,1,1);
 		Text creationViaAudio = new Text("Copy the audios that you want from the above list");
+		creationViaAudio.setFill(Color.GHOSTWHITE);
 		createAudioMenuPane.add(creationViaAudio, 0, 2,2,1);
 		TextArea audioToCreationList = new TextArea("Type names of audios to merge"
 				+ "\neach separed by a new line");
@@ -254,10 +260,11 @@ public class Main extends Application {
 		//Match Game Menu Design
 		Text gameMenuTitle = new Text("######Simple Matching Game######");
 		gameMenuTitle.setStyle("-fx-font: 18 arial;");
+		gameMenuTitle.setFill(Color.GHOSTWHITE);
 		//Buttons for level/play game
 		HBox levelSelectionButtons = new HBox();
 		Button EasyButton = new Button("Easy");
-		Button MediumButton = new Button("Midium");
+		Button MediumButton = new Button("Medium");
 		Button DifficultButton = new Button("Difficult");
 		levelSelectionButtons.getChildren().addAll(EasyButton, MediumButton, DifficultButton);
 		levelSelectionButtons.setAlignment(Pos.CENTER);
@@ -284,6 +291,7 @@ public class Main extends Application {
 		gameMenuPane.getRowConstraints().add(new RowConstraints(25));
 
 		Text instructionText = new Text("                                Choose level to play");
+		instructionText.setFill(Color.GHOSTWHITE);
 		gameMenuPane.add(instructionText, 0, 1,2,1);
 		gameMenuPane.add(levelSelectionButtons, 0, 2,2,1);
 		Text blank = new Text("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
@@ -312,6 +320,7 @@ public class Main extends Application {
 				alert.setContentText("[Instruction for Simple Matching Game]\n\nClick one of the three levels (Easy, Medium, Difficult) to start the game.\nClick \"Play Creation\" button to play a NEW creation.\nClick \"Play Creation again\""
 						+ " to play the SAME creation again.\nClick \"Click to get Answer!\" to get the answer for the creation played."
 						+ "\nGuess the subject of the creation and click Submit button.\n\n\nEasy: Audio + Video will be played\nMedium: only Video will be played\nDifficult: Only Audio will be played");
+				alert.getDialogPane().getStylesheets().add(Main.class.getResource("alert.css").toExternalForm());
 				alert.showAndWait();
 				return;
 			}
@@ -406,6 +415,7 @@ public class Main extends Application {
 					alert.setTitle("Congratulations!!!");
 					alert.setHeaderText("The Answer you have given in correct!!!!");
 					alert.setContentText("The Answer you have given in correct!!!!");
+					alert.getDialogPane().getStylesheets().add(Main.class.getResource("alert.css").toExternalForm());
 					alert.showAndWait();
 					return;
 				} else {
@@ -413,6 +423,7 @@ public class Main extends Application {
 					alert.setTitle("Error Dialog");
 					alert.setHeaderText("Sorry!");
 					alert.setContentText("Ooops, your answer is INCORRECT (╯︵╰,)");
+					alert.getDialogPane().getStylesheets().add(Main.class.getResource("alert.css").toExternalForm());
 					alert.showAndWait();
 				}
 			}
@@ -422,7 +433,7 @@ public class Main extends Application {
 		
 		
 		
-		
+		// User wants to know the answer of the creation for the game
 		getAnswer.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override
@@ -440,6 +451,7 @@ public class Main extends Application {
 				alert.setTitle("Answer!");
 				alert.setHeaderText("The Answer is \"" + play.getAnswer() + "\"");
 				alert.setContentText("The Answer is \"" + play.getAnswer() + "\"");
+				alert.getDialogPane().getStylesheets().add(Main.class.getResource("alert.css").toExternalForm());
 				alert.showAndWait();
 				return;
 			}
@@ -500,6 +512,7 @@ public class Main extends Application {
 		//View Pane design
 		Text viewMenuTitle = new Text("######View/Delete Existing Creations######");
 		viewMenuTitle.setStyle("-fx-font: 18 arial;");
+		viewMenuTitle.setFill(Color.GHOSTWHITE);
 		viewMenuPane.add(viewMenuTitle,0,0,2,1);
 		viewMenuPane.getColumnConstraints().add(new ColumnConstraints(300));
 		viewMenuPane.getColumnConstraints().add(new ColumnConstraints(100));
@@ -559,7 +572,7 @@ public class Main extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
-				menuConfig("game",mediaView,player);
+				menuConfig("game");
 			}
 
 		});
@@ -568,21 +581,21 @@ public class Main extends Application {
 		createMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
-				menuConfig("create", mediaView, player);
+				menuConfig("create");
 			}
 		});
 		//Change to Main menu
 		mainMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
-				menuConfig("main", mediaView, player);
+				menuConfig("main");
 			}
 		});
 		//Change to View menu
 		viewMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
-				menuConfig("view", mediaView, player);
+				menuConfig("view");
 				try {
 					ViewCreations.displayExistingCreations(creationList, playButton, deleteButton);
 					if ((playButton.isDisable() == true) && (deleteButton.isDisable() == true)) {
@@ -643,17 +656,6 @@ public class Main extends Application {
 					while ((line = br.readLine()) != null) {
 						if (line.equals(playTF.getText())) {
 							line = "creation found";
-//							viewMenuButton.setDisable(false);
-//							root.getChildren().remove(viewMenuPane);
-//							File fileUrl = new File("./creations/" + playTF.getText() + ".mp4"); 
-//							Media video = new Media(fileUrl.toURI().toString());
-//							player = new MediaPlayer(video);
-//							player.setAutoPlay(true);
-//							mediaView = new MediaView(player);
-//							playCreationMenu.setCenter(mediaView);
-//							root.getChildren().add(playCreationMenu);
-//							mediaView.fitWidthProperty().bind(root.widthProperty());
-//							mediaView.fitHeightProperty().bind(root.heightProperty());
 							ProcessBuilder playCreation = new ProcessBuilder("/bin/bash", "-c", "ffplay -autoexit "
 									+ "-x 400 -y 500 \"./creations/" + playTF.getText() + ".mp4\"");
 							playCreation.start();
@@ -670,22 +672,9 @@ public class Main extends Application {
 						Alert alert2 = new Alert(Alert.AlertType.ERROR);
 						alert2.setTitle("CREATION NOT PLAYED!");
 						alert2.setContentText("Creation not found. Try different name.");
+						alert2.getDialogPane().getStylesheets().add(Main.class.getResource("alert.css").toExternalForm());
 						alert2.showAndWait();
-					} else {
-						// Auto playing the creation
-//						player.setOnEndOfMedia(new Runnable() {
-//							public void run() {
-//								player.stop();
-//								mediaView.fitHeightProperty().unbind();
-//								mediaView.fitWidthProperty().unbind();
-//								playCreationMenu.getChildren().remove(mediaView);
-//								viewMenuButton.setDisable(true);
-//								root.getChildren().remove(playCreationMenu);
-//								root.getChildren().add(viewMenuPane);
-//								return;
-//							}
-//						});
-					}
+					} 
 				} catch (Exception e) {
 
 				}
@@ -694,7 +683,7 @@ public class Main extends Application {
 		//change to CreateAudio menu
 		createAudioMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent actionEvent) { menuConfig("createAudio", mediaView, player); 
+			public void handle(ActionEvent actionEvent) { menuConfig("createAudio"); 
 			
 			String cmd = "sed -i '/unnamedAudio/d' nameOfAudios.txt";
 			ProcessBuilder extractAudioProcess = new ProcessBuilder("bash", "-c", cmd);
@@ -713,17 +702,8 @@ public class Main extends Application {
 	//This method sets up the design of the menu pane when a menu is selected
 	//If the user changes the menu before the creation has finished playing
 	//This method also terminates the playing of the creation
-	void menuConfig(String menu, MediaView mediaView, MediaPlayer player){
+	void menuConfig(String menu){
 		if(menu.equals("create")){
-
-			// If creation is currently playing then it is stopped and removed from the GUI  
-			if ((mediaView != null) && (player != null)) {
-				player.stop();
-				mediaView.fitHeightProperty().unbind();
-				mediaView.fitWidthProperty().unbind();
-				playCreationMenu.getChildren().remove(mediaView);
-				player = null; mediaView = null;
-			}
 			root.getChildren().remove(mainMenuPane);
 			root.getChildren().remove(viewMenuPane);
 			root.getChildren().remove(createAudioMenuPane);
@@ -737,15 +717,6 @@ public class Main extends Application {
 			createAudioMenuButton.setDisable(false);
 			gameMenuButton.setDisable(false);
 		}else if(menu.equals("view")) {
-
-			// If creation is currently playing then it is stopped and removed from the GUI 
-			if ((mediaView != null) && (player != null)) {
-				player.stop();
-				mediaView.fitHeightProperty().unbind();
-				mediaView.fitWidthProperty().unbind();
-				playCreationMenu.getChildren().remove(mediaView);
-				player = null; mediaView = null;
-			}
 			root.getChildren().remove(mainMenuPane);
 			root.getChildren().remove(createMenuPane);
 			root.getChildren().remove(createAudioMenuPane);
@@ -758,14 +729,6 @@ public class Main extends Application {
 			createAudioMenuButton.setDisable(false);
 			gameMenuButton.setDisable(false);
 		}else if(menu.equals("game")) {
-			// If creation is currently playing then it is stopped and removed from the GUI 
-			if ((mediaView != null) && (player != null)) {
-				player.stop();
-				mediaView.fitHeightProperty().unbind();
-				mediaView.fitWidthProperty().unbind();
-				playCreationMenu.getChildren().remove(mediaView);
-				player = null; mediaView = null;
-			}
 			root.getChildren().remove(mainMenuPane);
 			root.getChildren().remove(createMenuPane);
 			root.getChildren().remove(createAudioMenuPane);
@@ -779,15 +742,6 @@ public class Main extends Application {
 			createAudioMenuButton.setDisable(false);
 			gameMenuButton.setDisable(true);
 		}else if (menu.equals("createAudio")){
-
-			// If creation is currently playing then it is stopped and removed from the GUI 
-			if ((mediaView != null) && (player != null)) {
-				player.stop();
-				mediaView.fitHeightProperty().unbind();
-				mediaView.fitWidthProperty().unbind();
-				playCreationMenu.getChildren().remove(mediaView);
-				player = null; mediaView = null;
-			}
 			root.getChildren().add(createAudioMenuPane);
 			root.getChildren().remove(gameMenuPane);
 			root.getChildren().remove(mainMenuPane);
@@ -800,15 +754,6 @@ public class Main extends Application {
 			mainMenuButton.setDisable(false);
 			gameMenuButton.setDisable(false);
 		}else{
-
-			// If creation is currently playing then it is stopped and removed from the GUI 
-			if ((mediaView != null) && (player != null)) {
-				player.stop();
-				mediaView.fitHeightProperty().unbind();
-				mediaView.fitWidthProperty().unbind();
-				playCreationMenu.getChildren().remove(mediaView);
-				player = null; mediaView = null;
-			}
 			root.getChildren().remove(createMenuPane);
 			root.getChildren().remove(viewMenuPane);
 			root.getChildren().remove(createAudioMenuPane);

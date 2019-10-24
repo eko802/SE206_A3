@@ -1,1 +1,104 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+/* This .css file is responsible for designing the entire GUI of VARpedia */
+* {
+	-fx-primary : #383838;
+	-fx-secondary : #FFFF8D;
+	-fx-primarytext: #e8e8e8;
+}
+
+.text-area {
+	-fx-text-fill: -fx-primarytext;
+	-fx-highlight-fill: derive(-fx-control-inner-background,-20%);
+	-fx-highlight-text-fill: black;
+}
+
+.text-area .content{
+  -fx-background-color: -fx-primary;	
+  -fx-border-color: white;
+}
+
+.text-area:focused .content {
+  -fx-border-color: -fx-secondary;
+}
+
+.root {
+	-fx-background-color: -fx-primary;
+}
+
+.button {
+	-fx-background-color: -fx-primary;
+	-fx-text-fill: -fx-primarytext;	
+	-fx-border-color: -fx-secondary;
+	-fx-border-radius: 10px;
+	-fx-background-radius: 10px;
+}
+
+.button:hover {
+	-fx-background-color: -fx-secondary;
+	-fx-text-fill: black;	
+	-fx-border-color: -fx-secondary;
+	-fx-border-radius: 10px;
+	-fx-background-radius: 10px;
+}
+
+.text-input {
+	-fx-background-color: -fx-primary;	
+    -fx-border-color: white;
+  	-fx-text-fill: -fx-primarytext;
+	-fx-highlight-fill: derive(-fx-control-inner-background,-20%);
+	-fx-highlight-text-fill: black;
+} 
+.text-input:focused {
+	-fx-border-color: -fx-secondary;
+} 
+
+
+/*Scroll bar design */
+.scroll-bar:vertical .track,
+.scroll-bar:horizontal .track {
+	-fx-border-color :transparent;
+    -fx-background-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-border-radius :1.5em;
+}
+
+.scroll-bar:horizontal .decrement-button, 
+.scroll-bar:horizontal .increment-button {
+    -fx-background-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-padding :0.0 0.0 10.0 0.0;
+
+}
+
+.scroll-bar:vertical .decrement-button,
+.scroll-bar:vertical .increment-button {
+    -fx-background-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-padding :0.0 10.0 0.0 0.0;
+
+}
+
+
+.scroll-bar:vertical .decrement-arrow,
+.scroll-bar:vertical .increment-arrow { 
+    -fx-padding :0.0 0.15em;
+}
+
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow{  
+    -fx-padding :0.15em 0.0;
+}
+
+/*This is when the user hovers or scrolls scroll bar */
+.thumb {
+    -fx-background-color :-fx-primary;
+    -fx-background-insets : 2.5, 0.0, 0.0;
+    -fx-background-radius : 1.5em;
+}
+
+.thumb:hover {
+    -fx-background-color :derive(#3D3C3F,30.0%);
+    -fx-background-insets : 2.5, 0.0, 0.0;
+    -fx-background-radius : 1.5em;
+}
+

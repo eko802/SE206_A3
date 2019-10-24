@@ -1,0 +1,116 @@
+/*This .css file is responsible for designing the alert & dialog pop-ups */
+* {
+	-fx-primary : #383838;
+	-fx-secondary : #FFFF8D;
+	-fx-primarytext: #e8e8e8;
+}
+
+.dialog-pane {
+	-fx-background-color: -fx-primary;
+}
+
+.dialog-pane > .content {
+    -fx-background-color: transparent;
+}
+
+
+.dialog-pane > .content.label {
+    -fx-text-fill: -fx-primarytext;	
+}
+
+/*This changes dialog boxes */
+.dialog-pane > .content .label {
+    -fx-text-fill: -fx-primarytext;	
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: -fx-primarytext;	
+}
+
+.dialog-pane .header-panel {
+	-fx-background-color: #282828;
+}
+
+/* Button style */
+.dialog-pane .button {
+   	-fx-background-color: -fx-primary;
+	-fx-text-fill: -fx-primarytext;	
+	-fx-border-color: -fx-secondary;
+	-fx-border-radius: 10px;
+	-fx-background-radius: 10px;
+}
+
+.dialog-pane .button:hover {
+  	-fx-background-color: -fx-secondary;
+	-fx-text-fill: black;	
+	-fx-border-color: -fx-secondary;
+	-fx-border-radius: 10px;
+	-fx-background-radius: 10px;
+}
+
+/* The text field design for alert/dialogue pop-ups */
+.text-input {
+	-fx-background-color: -fx-primary;	
+    -fx-border-color: white;
+  	-fx-text-fill: -fx-primarytext;
+	-fx-highlight-fill: derive(-fx-control-inner-background,-20%);
+	-fx-highlight-text-fill: black;
+} 
+.text-input:focused {
+	-fx-border-color: -fx-secondary;
+}
+
+/*Combo box design */
+.combo-box {
+	-fx-background-color: -fx-primary;
+	-fx-mark-color: white;
+	-fx-border-color: -fx-secondary;
+}
+
+.combo-box:hover {
+	-fx-background-color: derive(-fx-primary,20.0%);
+}
+
+.combo-box:hover .list-cell{
+	-fx-background-color: derive(-fx-primary,20.0%);
+}
+
+.combo-box .list-cell {
+    -fx-background-color: -fx-primary;
+    -fx-border-color: black;
+    -fx-text-fill: white;
+    -fx-padding: 3 0 2 7;
+    -fx-cell-size: 1.66667em; 
+}
+
+.combo-box-popup .list-view .list-cell:filled:hover {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-text-inner-color;
+}
+
+/*Scrol bar design */
+.scroll-bar:vertical .decrement-arrow,
+.scroll-bar:vertical .increment-arrow { 
+    -fx-padding :0.0 0.15em;
+}
+
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow{  
+    -fx-padding :0.15em 0.0;
+}
+
+/*This is when the user hovers or scrolls scroll bar */
+.thumb {
+    -fx-background-color :-fx-primary;
+    -fx-background-insets : 2.5, 0.0, 0.0;
+    -fx-background-radius : 1.5em;
+}
+
+.thumb:hover {
+    -fx-background-color :derive(#3D3C3F,30.0%);
+    -fx-background-insets : 2.5, 0.0, 0.0;
+    -fx-background-radius : 1.5em;
+}
+
+

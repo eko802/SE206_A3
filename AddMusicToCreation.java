@@ -21,6 +21,7 @@ public class AddMusicToCreation {
 		    		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 	                alert.setTitle("Add background music?");
 	                alert.setContentText("Please confirm adding background music");
+	                alert.getDialogPane().getStylesheets().add(AddMusicToCreation.class.getResource("alert.css").toExternalForm());
 	                Optional<ButtonType> result = alert.showAndWait();
 	                if (result.get() == ButtonType.CANCEL){
 	                	br.close();
@@ -40,6 +41,7 @@ public class AddMusicToCreation {
                         alert2.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                         alert2.setTitle("Background music added");
                         alert2.setContentText("Background music is successfuly added to the selected creation");
+                        alert2.getDialogPane().getStylesheets().add(AddMusicToCreation.class.getResource("alert.css").toExternalForm());
                         alert2.showAndWait();
                         return;
 	                }
@@ -48,6 +50,7 @@ public class AddMusicToCreation {
 		    Alert alert2 = new Alert(Alert.AlertType.ERROR);
             alert2.setTitle("CREATION NOT DELETED");
             alert2.setContentText("Creation not found. Try different name.");
+            alert2.getDialogPane().getStylesheets().add(AddMusicToCreation.class.getResource("alert.css").toExternalForm());
             alert2.showAndWait();
             return;
 		} catch (Exception e) {

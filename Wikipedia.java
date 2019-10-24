@@ -8,6 +8,7 @@ public class Wikipedia {
 		Alert invalidSearchAlert = new Alert(Alert.AlertType.ERROR);
 		invalidSearchAlert.setTitle("Invalid Search");
 		invalidSearchAlert.setContentText("Please try again");
+		invalidSearchAlert.getDialogPane().getStylesheets().add(Wikipedia.class.getResource("alert.css").toExternalForm());
 		invalidSearchAlert.showAndWait();
 		return;
 	}

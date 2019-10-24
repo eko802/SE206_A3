@@ -5,6 +5,12 @@ import java.io.InputStreamReader;
 
 import javafx.application.Platform;
 
+/*
+ * This class is the "Worker" that creates the creations for the game and its 3 levels.
+ * Easy level = audio + video is played
+ * Medium level = video is played
+ * Difficult level = audio is played
+ */
 public class GameCreationWorker extends Thread{
 
 	private String _currentLevel;
@@ -117,6 +123,7 @@ public class GameCreationWorker extends Thread{
 		return this.noCreation;
 	}
 	
+	// Getting answer to the creation
 	public String getAnswer() {
 		return this.gameAnswer;
 	}
