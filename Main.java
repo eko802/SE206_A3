@@ -50,7 +50,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception{
-		primaryStage.setTitle("VARpedia Prototype");
+		primaryStage.setTitle("VARpedia");
 
 		//Show GUI
 		Scene scene = new Scene(root, 400, 500);
@@ -63,7 +63,7 @@ public class Main extends Application {
 		menuSelectionButtons.setAlignment(Pos.CENTER);
 
 		//Main Menu Design
-		Text welcomeText = new Text("## WELCOME TO VARpedia prototype ##");
+		Text welcomeText = new Text("## WELCOME TO VARpedia ##");
 		welcomeText.setStyle("-fx-font: 18 arial;");
 		welcomeText.setFill(Color.GHOSTWHITE);
 		Text instruction = new Text("Please select a menu at the bottom");
