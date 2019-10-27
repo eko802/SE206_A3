@@ -197,7 +197,7 @@ public class AudioMergePaper implements Runnable{
 			
 			
 			ProcessBuilder addTextToVideo = new ProcessBuilder("/bin/bash", "-c", "ffmpeg -i ./creations/" + _creationName + ".mp4 "
-					+ "-vf drawtext=\"fontfile=/path/to/font.ttf: text=\'" + _creationName + "\': fontcolor=white: fontsize=18: box=1: boxcolor=black@0.5:"
+					+ "-vf drawtext=\"fontfile=/path/to/font.ttf: text=\'" + images + "\': fontcolor=white: fontsize=18: box=1: boxcolor=black@0.5:"
 					+ "boxborderw=5: x=(w-text_w)/2: y=(h-text_h)/2\" -codec:a copy ./creations/output.mp4;rm \"./creations/" + _creationName + ".mp4\";"
 					+ "mv ./creations/output.mp4 ./creations/" + _creationName + ".mp4;"
 							+ "echo \"" + images + "\" >> \"searchNames.txt\"");
@@ -245,7 +245,7 @@ public class AudioMergePaper implements Runnable{
 			
 			
 			ProcessBuilder addTextToVideo = new ProcessBuilder("/bin/bash", "-c", "ffmpeg -i ./creations/" + _creationName + ".mp4 "
-					+ "-vf drawtext=\"fontfile=/path/to/font.ttf: text=\'" + _creationName + "\': fontcolor=white: fontsize=18: box=1: boxcolor=black@0.5:"
+					+ "-vf drawtext=\"fontfile=/path/to/font.ttf: text=\'" + Main.searched + "\': fontcolor=white: fontsize=18: box=1: boxcolor=black@0.5:"
 					+ "boxborderw=5: x=(w-text_w)/2: y=(h-text_h)/2\" -codec:a copy ./creations/output.mp4;rm \"./creations/" + _creationName + ".mp4\";"
 					+ "mv ./creations/output.mp4 ./creations/" + _creationName + ".mp4;"
 							+ "echo \"" + Main.searched + "\" >> \"searchNames.txt\"");

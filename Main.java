@@ -274,9 +274,9 @@ public class Main extends Application {
 
 		//Buttons for playing creation and getting correct answer
 		HBox playOrGetAnswerOfCreation = new HBox();
-		Button playCreationGame = new Button("Play Creation");
-		Button playSameCreation = new Button("Play Creation again");
-		Button getAnswer = new Button("Click to get Answer!");
+		Button playCreationGame = new Button("Play NEW!");
+		Button playSameCreation = new Button("Play AGAIN!");
+		Button getAnswer = new Button("Answer!");
 		playSameCreation.setDisable(true);
 		getAnswer.setDisable(true);
 		playOrGetAnswerOfCreation.getChildren().addAll(playCreationGame, playSameCreation, getAnswer);
@@ -317,8 +317,8 @@ public class Main extends Application {
 				alert.setResizable(true);
 				alert.setHeaderText("Simple Matching Game");
 				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-				alert.setContentText("[Instruction for Simple Matching Game]\n\nClick one of the three levels (Easy, Medium, Difficult) to start the game.\nClick \"Play Creation\" button to play a NEW creation.\nClick \"Play Creation again\""
-						+ " to play the SAME creation again.\nClick \"Click to get Answer!\" to get the answer for the creation played."
+				alert.setContentText("[Instruction for Simple Matching Game]\n\nClick one of the three levels (Easy, Medium, Difficult) to start the game.\nClick \"Play NEW!\" button to play a NEW creation.\nClick \"Play AGAIN!\""
+						+ " to play the SAME creation again.\nClick \"Answer!\" to get the answer for the creation played."
 						+ "\nGuess the subject of the creation and click Submit button.\n\n\nEasy: Audio + Video will be played\nMedium: only Video will be played\nDifficult: Only Audio will be played");
 				alert.getDialogPane().getStylesheets().add(Main.class.getResource("alert.css").toExternalForm());
 				alert.showAndWait();
